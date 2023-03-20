@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <title>Document</title>
+</head>
+
+<body class="host_version"> 
+
+   	<!--! Loader -->
+   	<%- include('./partials/_Loader.ejs') %>
+
+    <div class="menu">
+        <div class="header">
+            <h2>SmartEdu</h2>
+            <i class="fa-solid fa-square-xmark" id="buttonx"></i>
+        </div>
+        <ul>
+            <a href="/"><li><i class="fa-solid fa-qrcode"></i> Home</li></a>
+            <a href="/users/logout"><li><i class="fa-solid fa-link"></i> Logout</li></a>
+        </ul>
+    </div>
+    <div class="back">
+        <i class="fa-solid fa-bars" id="button" tabindex="10"></i>
+        <div class="container">
+            <table class="table table-dark">
+                <h1 class="display-5 text-white">Users</h1>
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <% users.forEach(user => { %>
+                        <tr>
+                            <th scope="row"><%= user._id %></th>
+                            <td><%= user.email %></td>
+                            <td><%= user.role %></td>
+                            <td><%= user.name %></td>
+                            <td>
+                                <a href="/admin/users/<%= user._id %>?_method=DELETE" class="btn btn-sm btn-danger text-white">
+                                    <span>Delete</span>
+                                </a>
+                            </td>
+                        </tr>
+                    <% }) %>
+                    
+                </tbody>
+            </table>
+            <table class="table table-dark">
+                <h1 class="display-5 text-white">Courses</h1>
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Teacher</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <% if (courses) { %>
+                        <% courses.forEach(course => { %>
+                            <tr>
+                                <th scope="row"><%= course._id %></th>
+                                <td><%= course.name %></td>
+                                <td><%= course.user.name %></td>
+                                <td>
+                                    <a href="/admin/courses/<%= course._id %>?_method=DELETE" class="btn btn-sm btn-danger text-white">
+                                        <span>Delete</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } %>
+                </tbody>
+            </table>
+            <table class="table table-dark">
+                <h1 class="display-5 text-white">Categories</h1>
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">
+                        <button class="btn btn-sm px-3 btn-warning text-white" href="#" data-toggle="modal" data-target="#addCategory">
+							<span>Add</span>
+						</button>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <% categories.forEach(category => { %>
+                        <tr>
+                            <th scope="row"><%= category._id %></th>
+                            <td><%= category.name %></td>
+                            <td>
+                                <a href="/admin/categories/<%= category._id %>?_method=DELETE" class="btn btn-sm btn-danger text-white">
+                                    <span>Delete</span>
+                                </a>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+            <div class="modal fade" id="addCategory" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body customer-box">
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="Login">
+                                    <form method="POST" action="/admin/categories" class="form-horizontal">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <input type="text" name="name" class="form-control"  placeholder="Category Name">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-10">
+                                                <button type="submit" class="btn btn-light btn-radius btn-brd grd1">Submit</button>
+                                                <button type="submit" class="btn btn-light btn-radius btn-brd grd1" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- end col -->	
+        </div>
+    </div>
+
+    
+    <script>
+        const menu = document.querySelector('.menu');
+        const button = document.querySelector('#button');
+        const off = document.querySelector('#buttonx');
+        
+        button.addEventListener('click', () =>{
+            menu.classList.toggle('active')
+        })
+
+        off.addEventListener('click', () =>{
+            menu.classList.remove('active')
+        })
+
+        document.addEventListener('click', e =>{
+            if(
+                !e.composedPath().includes(button) &&
+                !e.composedPath().includes(menu)
+            ){
+                menu.classList.remove('active')
+            }
+        })
+    </script>
+
+    <!-- ALL JS FILES -->
+    <script src="/js/all.js"></script>
+    <!-- ALL PLUGINS -->
+    <script src="/js/custom.js"></script>
+
+</body>
+</html>
